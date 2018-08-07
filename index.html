@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Tarot App</title>
+</head>
+<body>
+    <div id="options">
+        <button onclick="reset()" id="resetButton">Reset</button>
+        <input type="checkbox" id="includeUpsideDown"> Include Upside-Down Readings
+        <input type="checkbox" id="majorArcanaOnly"> Major Arcana Only
+    </div>
+    <p>First Card: <span id="cardSpace1">-</span></p>
+    <button onclick="draw1()" id="drawButton1">Draw</button>
+    <p>Second Card: <span id="cardSpace2">-</span></p>
+    <button onclick="draw2()" id="drawButton2">Draw</button>
+    <p>Third Card: <span id="cardSpace3">-</span></p>
+    <button onclick="draw3()" id="drawButton3">Draw</button>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+</html>
