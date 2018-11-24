@@ -1,7 +1,82 @@
+* {
+    margin: 0;
+}
+
+body {
+    background: #222;
+}
+
+img {
+    border-radius: 20px;
+    border: 2px solid #000;
+    margin: 20px;
+}
+
+.nextDraw {
+    box-shadow: 0 0 90px 0px #bb8822;
+}
+
+#navbar {
+    display: flex;
+    height: 30px;
+    padding: 10px;
+}
+
+.navItem {
+    display: inline-block;
+    margin: 10px;
+    color: #bb8822;
+    font-size: 20px;
+    text-shadow: 0 0 4px black;
+}
+
+.container {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.card {
+    display: inline-block;
+    flex: 1;
+    margin-top: 25px;
+    margin-bottom: 0px;
+    padding: 0px;
+    width: 30%;
+    height: 560px;
+    text-align: center;
+}
+
+.cardText {
+    display: inline-block;
+    flex: 1;
+    text-align: center;
+    padding: 0px;
+    width: 30%;
+}
+
 span {
-    color: blue;;
+    color: #ddd;
+    font-size: 20px;
 }
 
 button {
-    color: red;
+    color: #bb8822;
+    font-size: 20px;
+    text-shadow: 0 0 4px black;
+    background: none;
+    border: none;
 }
+button:focus {
+    outline: 0;
+}
+
+.upsideDown {
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+}
+
+.upsideDownText {
+    color: grey;
+}
+

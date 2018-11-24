@@ -8,17 +8,45 @@
     <title>Tarot App</title>
 </head>
 <body>
-    <div id="options">
-        <button onclick="reset()" id="resetButton">Reset</button>
-        <input type="checkbox" id="includeUpsideDown"> Include Upside-Down Readings
-        <input type="checkbox" id="majorArcanaOnly"> Major Arcana Only
+    <div id="navbar">
+        <button class="navItem" onclick="reset()" id="resetButton"><p class="navItem">Reset</p></button>
+        <input type="checkbox" class="navItem" id="includeUpsideDown"><p class="navItem">Include Upside-Down Readings</p>
+        <input type="checkbox" class="navItem" id="majorArcanaOnly"><p class="navItem">Major Arcana Only</p>
     </div>
-    <p>First Card: <span id="cardSpace1">-</span></p>
-    <button onclick="draw1()" id="drawButton1">Draw</button>
-    <p>Second Card: <span id="cardSpace2">-</span></p>
-    <button onclick="draw2()" id="drawButton2">Draw</button>
-    <p>Third Card: <span id="cardSpace3">-</span></p>
-    <button onclick="draw3()" id="drawButton3">Draw</button>
+
+
+    <div class="container">
+        <div class="card" onclick="draw1()">
+            <img id="cardImage1">
+        </div>
+    
+
+        <div class="card" onclick="draw2()" >
+            <img id="cardImage2">
+        </div>
+
+
+        <div class="card" onclick="draw3()">
+            <img id="cardImage3">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="cardText">
+            <p><span id="cardSpace1"></span></p>
+            <p><span class = "upsideDownText" id="isUpsideDownText1"></span></p>
+        </div>
+        <div class="cardText">  
+            <p><span id="cardSpace2"></span></p>
+            <p><span class = "upsideDownText" id="isUpsideDownText2"></span></p>
+        </div>  
+        <div class="cardText">
+            <p><span id="cardSpace3"></span></p>
+            <p><span class = "upsideDownText" id="isUpsideDownText3"></span></p>
+        </div>  
+    </div>
+
+
     <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
