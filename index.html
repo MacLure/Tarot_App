@@ -1,608 +1,87 @@
-<html>
-    <head>
-        <title>Tarot Me</title>
-        <style>
-            * {
-                margin: 0;
-            }
-
-            body {
-                font-family: sans-serif;
-                background: #222;
-            }
-        
-            #navbar {
-                display: flex;
-                height: 30px;
-                padding: 10px;
-                transition: 0.3s;
-            }
-
-            label {
-                display: inline-block;
-                margin: 10px;
-                padding: 5px 20px;
-                color: #bb8822;
-                font-size: 20px;
-                cursor: pointer;
-                border: 1px solid #bb8822;
-                border-radius: 20px;
-                background-color: #302818;
-
-            }
-
-            label:active {
-                color: #bb8822;
-                background-color: #433a27;
-                box-shadow: 0 0 20px 0px #bb8822
-            }
-
-            .disabled {
-                color: #bb8822;
-                opacity: 0.5;
-                transition: 0.3s;
-            }
-
-            #upsideDown_YesNo, #majorArcana_YesNo, #showCardText_YesNo {
-                display: inline-block;
-                width: 30px;
-                color: #85631f;
-            }
-
-            input[type=checkbox] {
-                opacity: 0;
-            }
-
-            button {
-                color: #bb8822;
-                font-size: 20px;
-                background: none;
-                border: none;
-            }
-
-            button:focus {
-                outline: 0;
-            }
-
-            img {
-                width: 100%;
-                border-radius: 20px;
-                border: 2px solid #000;
-            }
-
-            .card_table {
-                display: flex;
-                justify-content: space-between;
-                max-width: 800px;
-                margin: 50px auto 0;
-            }
-
-            .scene {
-                width: 200px;
-                height: 345px;
-                margin: 40px 0;
-                perspective: 600px;
-                display: inline-block;
-            }
-            
-            #card1, #card2, #card3 {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                cursor: pointer;
-                transform-style: preserve-3d;
-                transform-origin: center right;
-                transition: transform 0.5s;
-                border-radius: 20px;
-            }
-
-            #cardImage1, #cardImage2, #cardImage3 {
-                height: 100%;
-            }
-            
-            .flash_container {
-                position: absolute;
-                height: 100%;
-                width: 100%;
-                overflow:hidden;
-                z-index: 100;
-                border-radius: 20px;
-            }
-
-            .card_flash {
-                position: absolute;
-                width: 100%;
-                height: 180px;
-                background-color: white;
-                z-index: 1;
-                animation: flash 0.3s;
-                animation-fill-mode: forwards;
-                transition-timing-function: cubic-bezier(0,0,1,1)
-            }
-
-            @keyframes flash {
-                0% {transform: translateY(440px) skewY(45deg)}
-                100% {transform: translateY(-270px) skewY(45deg)}
-            }
-
-            #card1.is-flipped, #card2.is-flipped, #card3.is-flipped {
-                transform: translateX(-100%) rotateY(-180deg);
-            }
-            
-            .card__face {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                line-height: 260px;
-                text-align: center;
-                font-weight: bold;
-                font-size: 40px;
-                backface-visibility: hidden;
-            }
-            
-            .card__face--front {
-            }
-            
-            .card__face--back {
-                transform: rotateY(180deg);
-            }
-                     
-            .nextDraw {
-                transition: 1s;
-                animation: pulsing_glow_ease_in 1s, pulsing_glow 1.5s 1s infinite;
-            }
-
-            @keyframes pulsing_glow_ease_in {
-                0% {box-shadow: 0 0 0 0 #bb8822;}
-                100% {box-shadow: 0 0 90px 0px #bb8822;}
-            }
-
-            @keyframes pulsing_glow {
-                0% {box-shadow: 0 0 90px 0px #bb8822;}
-                50% {box-shadow: 0 0 60px 0px #bb8822;}
-                100% {box-shadow: 0 0 90px 0px #bb8822;}
-            }
-
-            .upsideDown {
-                -webkit-transform: scaleY(-1);
-                transform: scaleY(-1);
-            }
-
-            .card_descriptions {
-                color: white;
-                display: flex;
-                justify-content: space-between;
-                max-width: 800px;
-                margin: 0 auto;
-            }
-            .card1_description, .card2_description, .card3_description {
-                text-align: center;
-                width: 200px;
-            }
-
-            #card1_title, #card2_title, #card3_title {
-                color: #bb8822;
-                opacity: 1;
-                transition: 1s;
-            }
-
-            #card1_upside_down, #card2_upside_down, #card3_upside_down {
-                color: #bb8822;
-                opacity: 1;
-                transition: 1s;
-                transition-delay: 0.5s;
-            }
-            
-            .remove_card1 {
-                animation: remove_card1 1s; 
-                animation-fill-mode: forwards;
-            }
-
-            .remove_card2 {
-                animation: remove_card2 1s; 
-                animation-fill-mode: forwards;
-            }
-
-            .remove_card3 {
-                animation: remove_card3 1s; 
-                animation-fill-mode: forwards;
-            }
-
-            @keyframes remove_card1 {
-                0% {transform: translateX(0px)}
-                60% {transform: translateX(150vw) rotateZ(45deg);}
-                61% {transform: translateX(0);
-                     transform: translateY(100vw) rotateZ(45deg);}
-                80% {transform: translateY(0) rotateZ(0)}
-                100% {transform: translateY(0)}
-            }
-
-            @keyframes remove_card2 {
-                0% {transform: translateX(0px)}
-                60% {transform: translateX(150vw) rotateZ(45deg)}
-                61% {transform: translateX(0);
-                     transform: translateY(100vw) rotateZ(45deg)}
-                90% {transform: translateY(0) rotateZ(0)}
-                100% {transform: translateY(0)}
-            }
-
-            @keyframes remove_card3 {
-                0% {transform: translateX(0px)}
-                60% {transform: translateX(100vw) rotateZ(45deg)}
-                61% {transform: translateX(0);
-                    transform: translateY(100vw) rotateZ(45deg)}
-                100% {transform: translateY(0) rotateZ(0)}
-                100% {transform: translateY(0)}
-            }
-
-            #card1_title.text_fade_out, #card2_title.text_fade_out, #card3_title.text_fade_out,#card1_upside_down.text_fade_out, #card2_upside_down.text_fade_out, #card3_upside_down.text_fade_out {
-                opacity: 0;
-                transition: 1s;
-            }
-
-            .reset_space {
-                text-align: center;
-                position: fixed;
-                top: 0;
-                right: 90px;
-            }
-
-            #resetButton {
-                margin: 30px auto;
-                visibility: hidden;
-                opacity: 0;
-                background-color: #bb8822;
-                color: black;
-                font-size: 20px;
-                cursor: pointer;
-                padding: 5px 30px;
-                border-radius: 20px;
-                transition: 1s;
-                animation: pulsing_glow 1.5s 1s infinite;
-            }
-
-            #resetButton.show {
-                visibility: visible;
-                opacity: 1;
-                transition: 1s;
-            }
-
-
-        </style>
-    </head>
-    <body>
-        <div id="navbar">
-            <div class="navItem">
-                <label for="includeUpsideDown" >Include Upside-Down Readings: <span id="upsideDown_YesNo">No</span></label>
-                <input type="checkbox" id="includeUpsideDown" onclick="updateOptions()">
-            </div>
-            <div class="navItem">
-                <label for="majorArcanaOnly">Major Arcana Only: <span id="majorArcana_YesNo">No</span></label>
-                <input type="checkbox" id="majorArcanaOnly" onclick="updateOptions()">
-            </div>
-            <div class="navItem">
-                <label for="showCardText">Show Card Text: <span id="showCardText_YesNo">No</span></label>
-                <input type="checkbox" id="showCardText" onclick="updateOptions()">
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="reset.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Tarot</title>
+</head>
+<body>
+    <div id="navbar">
+        <div class="navItem">
+            <label for="includeUpsideDown" >Include Reverse Readings: <span id="upsideDown_YesNo">No</span></label>
+            <input type="checkbox" id="includeUpsideDown" onclick="updateOptions()">
         </div>
-
-
-
-        <div class="card_table">
-            <div class="scene scene--card">
-                <div id="card1">
-                    <div class="card__face card__face--front"><img src="tarot_card_images/card-back.jpg"></div>
-                    <div class="card__face card__face--back">
-                        <div class="flash_container">
-                            <div id="to_flash1"></div>
-                        </div>
-                    <img id="cardImage1"></div>
-                </div>
-            </div>
-
-            <div class="scene scene--card">
-                <div id="card2">
-                    <div class="card__face card__face--front"><img src="tarot_card_images/card-back.jpg"></div>
-                    <div class="card__face card__face--back">
-                        <div class="flash_container">
-                            <div id="to_flash2"></div>
-                        </div>
-                    <img id="cardImage2"></div>
-                </div>
-            </div>
-
-            <div class="scene scene--card">
-                <div id="card3">
-                    <div class="card__face card__face--front"><img src="tarot_card_images/card-back.jpg"></div>
-                    <div class="card__face card__face--back">
-                        <div class="flash_container">
-                            <div id="to_flash3"></div>
-                        </div>
-                    <img id="cardImage3"></div>
-                </div>
-            </div>
+        <div class="navItem">
+            <label for="majorArcanaOnly">Major Arcana Only: <span id="majorArcana_YesNo">No</span></label>
+            <input type="checkbox" id="majorArcanaOnly" onclick="updateOptions()">
         </div>
-        <div class="card_descriptions">
-            <div class="card1_description">
-                <span id="card1_title" class="text_fade_out"></span><br>
-                <span id="card1_upside_down" class="text_fade_out"></span><br>
-            </div>
-            <div class="card2_description">
-                <span id="card2_title" class="text_fade_out"></span><br>
-                <span id="card2_upside_down" class="text_fade_out"></span><br>
-            </div>
-            <div class="card3_description">
-                <span id="card3_title" class="text_fade_out"></span><br>
-                <span id="card3_upside_down" class="text_fade_out"></span><br>
-            </div>
+        <div class="navItem">
+            <label for="showCardText">Show Card Text: <span id="showCardText_YesNo">No</span></label>
+            <input type="checkbox" id="showCardText" onclick="updateOptions()">
         </div>
-        <div class="reset_space">
-                <button
-                    onclick="doRemoveCardsAnimation()"
-                    id="resetButton"
-                    disabled = true;
-                >
-                    Reset
-                </button>
-        </div>
-
-        <script>
+    </div>
     
-            let tarotDeck = ["0 – The Fool", "I – The Magician", "II – The High Priestess", "III – The Empress", "IV – The Emperor", "V – The Hierophant", "VI – The Lovers", "VII – The Chariot", "VIII – Strength", "IX – The Hermit", "X – Wheel of Fortune", "XI – Justice", "XII – The Hanged Man", "XIII – Death", "XIV – Temperance", "XV – The Devil", "XVI – The Tower", "XVII – The Star", "XVIII – The Moon", "XIX – The Sun", "XX – Judgement", "XXI – The World", "Ace of Wands", "Two of Wands", "Three of Wands", "Four of Wands", "Five of Wands", "Six of Wands", "Seven of Wands","Eight of Wands", "Nine of Wands", "Ten of Wands", "Page of Wands", "Knight of Wands", "Queen of Wands", "King of Wands", "Ace of Pentacles", "Two of Pentacles", "Three of Pentacles", "Four of Pentacles", "Five of Pentacles", "Six of Pentacles", "Seven of Pentacles", "Eight of Pentacles", "Nine of Pentacles", "Ten of Pentacles", "Page of Pentacles", "Knight of Pentacles", "Two of Cups", "Three of Cups", "Four of Cups", "Five of Cups", "Six of Cups",  "Seven of Cups", "Eight of Cups", "Nine of Cups", "Ten of Cups", "Page of Cups", "Knight of Cups", "Queen of Cups", "King of Cups", "Ace of Swords", "Two of Swords", "Three of Swords", "Four of Swords", "Five of Swords", "Six of Swords", "Seven of Swords", "Eight of Swords", "Nine of Swords", "Ten of Swords", "Page of Swords", "Knight of Swords", "Queen of Swords", "King of Swords"];
-            let randomCardIndex = [Math.floor(Math.random() * 22)];
-            let newCard = tarotDeck[randomCardIndex];
-            let newCardImage = './tarot_card_images/' + tarotDeck[randomCardIndex] + '.jpg';
-            let isUpsideDown = false;
-            let tarotDeckLength = 75;
-            let majorArcanaLength = 22;
+    <div class="card_table">
+        <div class="scene scene--card">
+            <div id="card1">
+                <div class="card__face card__face--front"><img src="tarot_card_images/card-back.jpg"></div>
+                <div class="card__face card__face--back">
+                    <div class="flash_container">
+                        <div id="to_flash1"></div>
+                    </div>
+                <img id="cardImage1"></div>
+            </div>
+        </div>
 
-            let draw1Enabled = true;
-            let draw2Enabled = false;
-            let draw3Enabled = false;
+        <div class="scene scene--card">
+            <div id="card2">
+                <div class="card__face card__face--front"><img src="tarot_card_images/card-back.jpg"></div>
+                <div class="card__face card__face--back">
+                    <div class="flash_container">
+                        <div id="to_flash2"></div>
+                    </div>
+                <img id="cardImage2"></div>
+            </div>
+        </div>
 
-            let card1 = document.getElementById("card1");
-            let card2 = document.getElementById("card2");
-            let card3 = document.getElementById("card3");
-
-            function updateOptions() {
-                if (document.getElementById('includeUpsideDown').checked) {
-                    document.getElementById("upsideDown_YesNo").innerHTML = "Yes"
-                } else {
-                    document.getElementById("upsideDown_YesNo").innerHTML = "No"
-                }
-                if (document.getElementById('majorArcanaOnly').checked) {
-                    document.getElementById("majorArcana_YesNo").innerHTML = "Yes"
-                } else {
-                    document.getElementById("majorArcana_YesNo").innerHTML = "No"
-                }
-                if (document.getElementById('showCardText').checked) {
-                    document.getElementById("showCardText_YesNo").innerHTML = "Yes"
-                } else {
-                    document.getElementById("showCardText_YesNo").innerHTML = "No"
-                }
-            }
-            
-
-
-            function randomUpsideDown() {
-                isUpsideDown = (Math.floor(Math.random() * 2) == 0);
-            }
-
-            function randomCard() {
-                if (document.getElementById('majorArcanaOnly').checked) {
-                    randomCardIndex = [Math.floor(Math.random() * majorArcanaLength)];
-                    newCard = tarotDeck[randomCardIndex];
-                } else {
-                    randomCardIndex = [Math.floor(Math.random() * tarotDeckLength)];
-                    newCard = tarotDeck[randomCardIndex];
-                }
-            }
-
-            function removeCardFromDeck() {
-                let cardIndex = tarotDeck.indexOf(newCard);
-                if (document.getElementById('majorArcanaOnly').checked) {
-                    tarotDeck.splice(cardIndex, 1);
-                    majorArcanaLength --;
-                } else {
-                    tarotDeck.splice(cardIndex, 1);
-                    tarotDeckLength --;        
-                }
-            }
-
-            card1.addEventListener( 'click', function() {
-                if (draw1Enabled) {
-                    card1.classList.add("is-flipped");
-                    randomCard();
-                    randomUpsideDown();
-                    if (document.getElementById('showCardText').checked) {
-                        setTimeout(function() {document.getElementById("card1_title").classList.remove("text_fade_out")}, 800);
-                        setTimeout(function() {document.getElementById("card1_upside_down").classList.remove("text_fade_out")}, 800);
-                    }
-                    if (isUpsideDown && (document.getElementById('includeUpsideDown').checked)){
-                        document.getElementById("card1_title").innerHTML = newCard;
-                        document.getElementById("cardImage1").src = './tarot_card_images/' + newCard + '.jpg';
-                        document.getElementById("cardImage1").alt = newCard + ', upaide down';
-                        document.getElementById("cardImage1").className += " upsideDown";
-                        document.getElementById("card1_upside_down").innerHTML = "(upside down)";
-                        
-                    } else {
-                        document.getElementById("card1_title").innerHTML = newCard;
-                        document.getElementById("cardImage1").src = './tarot_card_images/' + newCard + '.jpg';
-                        document.getElementById("cardImage1").alt = newCard;
-                        document.getElementById("cardImage1").className = "";
-                        document.getElementById("card1_upside_down").innerHTML = "";
-
-                    }
-                    removeCardFromDeck()
-
-                    draw1Enabled = false;
-                    draw2Enabled = true;
-
-                    card2.classList.add("nextDraw");
-                    card1.classList.remove("nextDraw");
-
-                    document.getElementById("navbar").classList.add("disabled");
-
-                    document.getElementById("includeUpsideDown").disabled = true;
-                    document.getElementById('majorArcanaOnly').disabled = true;
-                    document.getElementById('showCardText').disabled = true;
-
-                    setTimeout(function() {document.getElementById("to_flash1").classList.add("card_flash");}, 700)
-                    setTimeout(function() {document.getElementById("to_flash1").classList.remove("card_flash");}, 1700)
-
-                }
-            });
-
-            card2.addEventListener( 'click', function() {
-                if (draw2Enabled) {
-                    card2.classList.add("is-flipped");
-                    randomCard()
-                    randomUpsideDown();
-                    if (document.getElementById('showCardText').checked) {
-                        setTimeout(function() {document.getElementById("card2_title").classList.remove("text_fade_out")}, 800);
-                        setTimeout(function() {document.getElementById("card2_upside_down").classList.remove("text_fade_out")}, 800);
-                    }
-                    if (isUpsideDown && (document.getElementById('includeUpsideDown').checked)){
-                        document.getElementById("card2_title").innerHTML = newCard;
-                        document.getElementById("cardImage2").src = './tarot_card_images/' + newCard + '.jpg';
-                        document.getElementById("cardImage2").alt = tarotDeck[randomCardIndex] + ', upaide down';
-                        document.getElementById("cardImage2").className += " upsideDown";
-                        document.getElementById("card2_upside_down").innerHTML = "(upside down)";
-                        
-                    } else {
-                        document.getElementById("card2_title").innerHTML = newCard;
-                        document.getElementById("cardImage2").src = './tarot_card_images/' + newCard + '.jpg';
-                        document.getElementById("cardImage2").alt = newCard;
-                        document.getElementById("cardImage2").className = "";
-                        document.getElementById("card2_upside_down").innerHTML = "";
-
-                    }
-                    removeCardFromDeck()
-
-                    draw2Enabled = false;
-                    draw3Enabled = true;
-
-                    card3.classList.add("nextDraw");
-                    card2.classList.remove("nextDraw");
-
-                    setTimeout(function() {document.getElementById("to_flash2").classList.add("card_flash");}, 700)
-                    setTimeout(function() {document.getElementById("to_flash2").classList.remove("card_flash");}, 1700)
-
-                }
-            });
-
-            card3.addEventListener( 'click', function() {
-                if (draw3Enabled) {
-                    card3.classList.add("is-flipped");
-                    randomCard()
-                    randomUpsideDown();
-                    if (document.getElementById('showCardText').checked) {
-                        setTimeout(function() {document.getElementById("card3_title").classList.remove("text_fade_out")}, 800);
-                        setTimeout(function() {document.getElementById("card3_upside_down").classList.remove("text_fade_out")}, 800);
-                    }
-                    if (isUpsideDown && (document.getElementById('includeUpsideDown').checked)){
-                        document.getElementById("card3_title").innerHTML = newCard;
-                        document.getElementById("cardImage3").src = './tarot_card_images/' + newCard + '.jpg';
-                        document.getElementById("cardImage3").alt = newCard + ', upaide down';
-                        document.getElementById("cardImage3").className += " upsideDown";
-                        document.getElementById("card3_upside_down").innerHTML = "(upside down)";
-                        
-                    } else {
-                        document.getElementById("card3_title").innerHTML = newCard;
-                        document.getElementById("cardImage3").src = './tarot_card_images/' + newCard + '.jpg';
-                        document.getElementById("cardImage3").alt = newCard;
-                        document.getElementById("cardImage3").className = "";
-                        document.getElementById("card3_upside_down").innerHTML = "";
-
-                    }
-                    removeCardFromDeck()
-
-                    draw3Enabled = false;
-
-                    card3.classList.remove("nextDraw");
-
-                    setTimeout(function() {document.getElementById("to_flash3").classList.add("card_flash");}, 700)
-                    setTimeout(function() {document.getElementById("to_flash3").classList.remove("card_flash");}, 1700)
-
-                    document.getElementById("resetButton").disabled = false;
-                    document.getElementById("resetButton").disabled = false;
-                    setTimeout(function() {document.getElementById("resetButton").classList.add('show')}, 1000);
-
-                }
-            });
-
-            reset();
-
-            function reset() {
-                tarotDeck = ["0 – The Fool", "I – The Magician", "II – The High Priestess", "III – The Empress", "IV – The Emperor", "V – The Hierophant", "VI – The Lovers", "VII – The Chariot", "VIII – Strength", "IX – The Hermit", "X – Wheel of Fortune", "XI – Justice", "XII – The Hanged Man", "XIII – Death", "XIV – Temperance", "XV – The Devil", "XVI – The Tower", "XVII – The Star", "XVIII – The Moon", "XIX – The Sun", "XX – Judgement", "XXI – The World", "Ace of Wands", "Two of Wands", "Three of Wands", "Four of Wands", "Five of Wands", "Six of Wands", "Seven of Wands","Eight of Wands", "Nine of Wands", "Ten of Wands", "Page of Wands", "Knight of Wands", "Queen of Wands", "King of Wands", "Ace of Pentacles", "Two of Pentacles", "Three of Pentacles", "Four of Pentacles", "Five of Pentacles", "Six of Pentacles", "Seven of Pentacles", "Eight of Pentacles", "Nine of Pentacles", "Ten of Pentacles", "Page of Pentacles", "Knight of Pentacles", "Two of Cups", "Three of Cups", "Four of Cups", "Five of Cups", "Six of Cups",  "Seven of Cups", "Eight of Cups", "Nine of Cups", "Ten of Cups", "Page of Cups", "Knight of Cups", "Queen of Cups", "King of Cups", "Ace of Swords", "Two of Swords", "Three of Swords", "Four of Swords", "Five of Swords", "Six of Swords", "Seven of Swords", "Eight of Swords", "Nine of Swords", "Ten of Swords", "Page of Swords", "Knight of Swords", "Queen of Swords", "King of Swords"];
-                tarotDeckLength = 75;
-                majorArcanaLength = 22;
-                draw1Enabled = true;
-                draw2Enabled = false;
-                draw3Enabled = false;
-
-                card1.classList.add("nextDraw");
-                card2.className = "";
-                card3.className = "";
-
-                document.getElementById("card1_title").innerHTML = "";
-                document.getElementById("card1_upside_down").innerHTML = "";
-                document.getElementById("card2_title").innerHTML = "";
-                document.getElementById("card2_upside_down").innerHTML = "";
-                document.getElementById("card3_title").innerHTML = "";
-                document.getElementById("card3_upside_down").innerHTML = "";
-            
-                card1.classList.remove("remove_card1");
-                card2.classList.remove("remove_card2");
-                card3.classList.remove("remove_card3");
-
-            }
-
-            function doRemoveCardsAnimation() {
-                document.getElementById("card1_title").classList.add("text_fade_out");
-                document.getElementById("card2_title").classList.add("text_fade_out");
-                document.getElementById("card3_title").classList.add("text_fade_out");
-
-                document.getElementById("card1_upside_down").classList.add("text_fade_out");
-                document.getElementById("card2_upside_down").classList.add("text_fade_out");
-                document.getElementById("card3_upside_down").classList.add("text_fade_out");
-
-                document.getElementById("resetButton").classList.remove('show');
-
-                document.getElementById("includeUpsideDown").disabled = false;
-                document.getElementById('majorArcanaOnly').disabled = false;
-                document.getElementById('showCardText').disabled = false;
-                document.getElementById("navbar").classList.remove("disabled");
-
-
-
-                if (!card1.classList.contains("is-flipped")) {
-                    removeCardsAnimation();
-                    setTimeout(reset, 1000);
-                } else
-                setTimeout(removeCardsAnimation, 600);
-                    card1.classList.remove("is-flipped");
-                    card2.classList.remove("is-flipped");
-                    card3.classList.remove("is-flipped");
-                    setTimeout(reset, 1700);
-                }
-
-            function removeCardsAnimation() {
-                card1.classList.add("remove_card1");
-                card2.classList.add("remove_card2");
-                card3.classList.add("remove_card3");
-
-                document.getElementById("card1_title").classList.add("text_fade_out");
-                document.getElementById("card2_title").classList.add("text_fade_out");
-                document.getElementById("card3_title").classList.add("text_fade_out");
-
-                document.getElementById("card1_upside_down").classList.add("text_fade_out");
-                document.getElementById("card2_upside_down").classList.add("text_fade_out");
-                document.getElementById("card3_upside_down").classList.add("text_fade_out");
-
-            }
-
-        </script>
+        <div class="scene scene--card">
+            <div id="card3">
+                <div class="card__face card__face--front"><img src="tarot_card_images/card-back.jpg"></div>
+                <div class="card__face card__face--back">
+                    <div class="flash_container">
+                        <div id="to_flash3"></div>
+                    </div>
+                <img id="cardImage3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="card_descriptions">
+        <div class="card1_description">
+            <span id="card1_title" class="text_fade_out"></span><br>
+            <span id="card1_upside_down" class="text_fade_out"></span><br>
+        </div>
+        <div class="card2_description">
+            <span id="card2_title" class="text_fade_out"></span><br>
+            <span id="card2_upside_down" class="text_fade_out"></span><br>
+        </div>
+        <div class="card3_description">
+            <span id="card3_title" class="text_fade_out"></span><br>
+            <span id="card3_upside_down" class="text_fade_out"></span><br>
+        </div>
+    </div>
+    <div class="reset_space">
+            <button
+                onclick="doRemoveCardsAnimation()"
+                id="resetButton"
+                disabled = true;
+            >
+                Reset
+            </button>
+    </div>
+    <script src="app.js"></script>
 
 </body>
 </html>

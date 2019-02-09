@@ -1,0 +1,263 @@
+body {
+    font-family: sans-serif;
+    background: #222;
+    overflow: hidden;
+}
+
+#navbar {
+    display: flex;
+    height: 30px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+label {
+    display: inline-block;
+    margin: 10px;
+    padding: 5px 20px;
+    color: #bb8822;
+    font-size: 20px;
+    cursor: pointer;
+    border: 1px solid #bb8822;
+    border-radius: 20px;
+    background-color: #302818;
+
+}
+
+label:active {
+    color: #bb8822;
+    background-color: #433a27;
+    box-shadow: 0 0 20px 0px #bb8822
+}
+
+.disabled {
+    color: #bb8822;
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+#upsideDown_YesNo, #majorArcana_YesNo, #showCardText_YesNo {
+    display: inline-block;
+    width: 30px;
+    color: #85631f;
+}
+
+
+
+input[type=checkbox] {
+    opacity: 0;
+}
+
+button {
+    color: #bb8822;
+    font-size: 20px;
+    background: none;
+    border: none;
+}
+
+button:focus {
+    outline: 0;
+}
+
+img {
+    width: 100%;
+    border-radius: 20px;
+    border: 2px solid #000;
+}
+
+.card_table {
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 50px auto 0;
+}
+
+.scene {
+    width: 200px;
+    height: 345px;
+    margin: 40px 0;
+    perspective: 600px;
+    display: inline-block;
+}
+
+#card1, #card2, #card3 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transform-origin: center right;
+    transition: transform 0.5s;
+    border-radius: 20px;
+}
+
+#cardImage1, #cardImage2, #cardImage3 {
+    height: 100%;
+}
+
+.flash_container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow:hidden;
+    z-index: 100;
+    border-radius: 20px;
+}
+
+.card_flash {
+    position: absolute;
+    width: 100%;
+    height: 180px;
+    background-color: white;
+    z-index: 1;
+    animation: flash 0.3s;
+    animation-fill-mode: forwards;
+    transition-timing-function: cubic-bezier(0,0,1,1)
+}
+
+@keyframes flash {
+    0% {transform: translateY(440px) skewY(45deg)}
+    100% {transform: translateY(-270px) skewY(45deg)}
+}
+
+#card1.is-flipped, #card2.is-flipped, #card3.is-flipped {
+    transform: translateX(-100%) rotateY(-180deg);
+}
+
+.card__face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    line-height: 260px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+    backface-visibility: hidden;
+}
+
+.card__face--front {
+}
+
+.card__face--back {
+    transform: rotateY(180deg);
+}
+         
+.nextDraw {
+    transition: 1s;
+    animation: pulsing_glow_ease_in 1s, pulsing_glow 1.5s 1s infinite;
+}
+
+@keyframes pulsing_glow_ease_in {
+    0% {box-shadow: 0 0 0 0 #bb8822;}
+    100% {box-shadow: 0 0 90px 0px #bb8822;}
+}
+
+@keyframes pulsing_glow {
+    0% {box-shadow: 0 0 90px 0px #bb8822;}
+    50% {box-shadow: 0 0 60px 0px #bb8822;}
+    100% {box-shadow: 0 0 90px 0px #bb8822;}
+}
+
+.upsideDown {
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+}
+
+.card_descriptions {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.card1_description, .card2_description, .card3_description {
+    text-align: center;
+    width: 200px;
+}
+
+#card1_title, #card2_title, #card3_title {
+    color: #bb8822;
+    opacity: 1;
+    transition: 1s;
+}
+
+#card1_upside_down, #card2_upside_down, #card3_upside_down {
+    color: #bb8822;
+    opacity: 1;
+    transition: 1s;
+    transition-delay: 0.5s;
+}
+
+.remove_card1 {
+    animation: remove_card1 1s; 
+    animation-fill-mode: forwards;
+}
+
+.remove_card2 {
+    animation: remove_card2 1s; 
+    animation-fill-mode: forwards;
+}
+
+.remove_card3 {
+    animation: remove_card3 1s; 
+    animation-fill-mode: forwards;
+}
+
+@keyframes remove_card1 {
+    0% {transform: translateX(0px)}
+    60% {transform: translateX(150vw) rotateZ(45deg);}
+    61% {transform: translateX(0);
+         transform: translateY(100vw) rotateZ(45deg);}
+    80% {transform: translateY(0) rotateZ(0)}
+    100% {transform: translateY(0)}
+}
+
+@keyframes remove_card2 {
+    0% {transform: translateX(0px)}
+    60% {transform: translateX(150vw) rotateZ(45deg)}
+    61% {transform: translateX(0);
+         transform: translateY(100vw) rotateZ(45deg)}
+    90% {transform: translateY(0) rotateZ(0)}
+    100% {transform: translateY(0)}
+}
+
+@keyframes remove_card3 {
+    0% {transform: translateX(0px)}
+    60% {transform: translateX(100vw) rotateZ(45deg)}
+    61% {transform: translateX(0);
+        transform: translateY(100vw) rotateZ(45deg)}
+    100% {transform: translateY(0) rotateZ(0)}
+    100% {transform: translateY(0)}
+}
+
+#card1_title.text_fade_out, #card2_title.text_fade_out, #card3_title.text_fade_out,#card1_upside_down.text_fade_out, #card2_upside_down.text_fade_out, #card3_upside_down.text_fade_out {
+    opacity: 0;
+    transition: 1s;
+}
+
+.reset_space {
+    text-align: center;
+    position: fixed;
+    top: 40px;
+    left: 18px;
+}
+
+#resetButton {
+    margin: 30px auto;
+    visibility: hidden;
+    opacity: 0;
+    background-color: #bb8822;
+    color: black;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px 30px;
+    border-radius: 20px;
+    transition: 1s;
+    animation: pulsing_glow 1.5s 1s infinite;
+}
+
+#resetButton.show {
+    visibility: visible;
+    opacity: 1;
+    transition: 1s;
+}
