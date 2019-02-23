@@ -4,11 +4,26 @@ body {
     overflow: hidden;
 }
 
+.all {
+    margin: 5vh auto;
+    padding-left: 5vw
+}
+
 #navbar {
     display: flex;
     height: 30px;
     padding: 10px;
     transition: 0.3s;
+}
+
+#logo {
+    background-image: url("tarot-rize.svg");
+    width: 100px;
+    height: 50px;
+    margin: 0 10px;
+    opacity: 1;
+    transition: 1s;
+
 }
 
 label {
@@ -41,8 +56,6 @@ label:active {
     width: 30px;
     color: #e2bb6c;
 }
-
-
 
 input[type=checkbox] {
     opacity: 0;
@@ -239,8 +252,8 @@ img {
 .reset_space {
     text-align: center;
     position: fixed;
-    top: 40px;
-    left: 18px;
+    top: 3.5vh;
+    left: 10vh;
 }
 
 #resetButton {
@@ -260,5 +273,10 @@ img {
 #resetButton.show {
     visibility: visible;
     opacity: 1;
+    transition: 1s;
+}
+
+#logo.hidden {
+    opacity: 0;
     transition: 1s;
 }
